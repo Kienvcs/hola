@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nền Trang Huyền Ảo</title>
+  <title>Nền Trang Huyền Ảo với Dải Ngân Hà 3D</title>
   <style>
     body {
       margin: 0;
       overflow: hidden;
-      background: radial-gradient(ellipse at bottom, #000428, #004e92); 
-      /* Sử dụng radial-gradient để tạo hiệu ứng lan tỏa từ dưới lên */
+      background: radial-gradient(ellipse at bottom, #000428, #004e92);
+      perspective: 1000px; /* Tạo perspective cho toàn bộ body */
     }
 
     .container {
@@ -18,9 +18,31 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      perspective: 1000px; /* Tạo hiệu ứng 3D cho các ngôi sao */
+      transform-style: preserve-3d; /* Giữ hiệu ứng 3D cho các element con */
     }
 
+    /* Sao băng */
+    .shooting-star {
+      position: absolute;
+      top: 10%;
+      left: 10%;
+      width: 100px;
+      height: 2px;
+      background: linear-gradient(to right, rgba(255,255,255,0), white, rgba(255,255,255,0));
+      transform: rotate(-45deg) translateZ(200px); /* Hiển thị sao băng ở xa */
+      animation: shoot 3s linear infinite;
+    }
+
+    @keyframes shoot {
+      0% {
+        transform: rotate(-45deg) translateZ(200px) translateX(0);
+      }
+      100% {
+        transform: rotate(-45deg) translateZ(200px) translateX(80vw); /* Di chuyển sao băng */
+      }
+    }
+
+    /* Ngôi sao */
     .star {
       position: absolute;
       width: 2px;
@@ -28,8 +50,7 @@
       background-color: #fff;
       border-radius: 50%;
       box-shadow: 0 0 10px #fff;
-      animation: twinkle 2s linear infinite, move 10s linear infinite; 
-      /* Thêm animation di chuyển cho ngôi sao */
+      animation: twinkle 2s linear infinite, move 15s linear infinite;
     }
 
     @keyframes twinkle {
@@ -41,13 +62,12 @@
       }
     }
 
-    /* Animation di chuyển với hiệu ứng 3D */
     @keyframes move {
       0% {
         transform: translateZ(0px);
       }
       50% {
-        transform: translateZ(200px); /* Di chuyển ngôi sao ra xa */
+        transform: translateZ(300px); /* Tăng khoảng cách di chuyển */
       }
       100% {
         transform: translateZ(0px);
@@ -60,18 +80,18 @@
       animation-delay: random(0s, 2s);
     }
 
-    /* Tinh vân với nhiều màu sắc hơn */
+    /* Tinh vân */
     .nebula {
       position: absolute;
-      width: 300px;
-      height: 200px;
+      width: 400px; /* Tăng kích thước */
+      height: 300px; /* Tăng kích thước */
       background: radial-gradient(ellipse at center, 
-        rgba(100, 149, 237, 0.6), /* Màu xanh lam */
-        rgba(255, 165, 0, 0.4),  /* Màu cam */
+        rgba(100, 149, 237, 0.6),
+        rgba(255, 165, 0, 0.4), 
+        rgba(255, 105, 180, 0.3), /* Thêm màu hồng */
         rgba(255, 255, 255, 0) 70%);
-      filter: blur(50px);
-      animation: drift 15s linear infinite, rotate 20s linear infinite; 
-      /* Thêm animation xoay cho tinh vân */
+      filter: blur(60px); /* Tăng độ mờ */
+      animation: drift 20s linear infinite, rotate 30s linear infinite; 
     }
 
     @keyframes drift {
@@ -79,11 +99,10 @@
         transform: translate(0, 0);
       }
       100% {
-        transform: translate(100px, -50px);
+        transform: translate(150px, -80px); /* Thay đổi hướng di chuyển */
       }
     }
 
-    /* Animation xoay */
     @keyframes rotate {
       0% {
         transform: rotate(0deg);
@@ -94,35 +113,96 @@
     }
 
     .nebula:nth-child(1) {
-      top: 30%;
-      left: 20%;
+      top: 20%;
+      left: 10%;
       animation-delay: 3s;
     }
 
     .nebula:nth-child(2) {
-      top: 60%;
-      left: 80%;
+      top: 70%;
+      left: 70%;
       animation-delay: 7s;
     }
 
-    /* Thêm nhiều nebula hơn nếu cần */
+    /* Dải Ngân Hà 3D */
+    #galaxy {
+      position: absolute;
+      width: 500px; /* Tăng kích thước */
+      height: 500px; /* Tăng kích thước */
+      transform-style: preserve-3d;
+      animation: rotateGalaxy 40s linear infinite; /* Thay đổi tốc độ xoay */
+    }
+
+    .galaxy-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      transform-style: preserve-3d;
+    }
+
+    .galaxy-ring:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotateX(90deg);
+      width: 100%;
+      height: 15px; /* Tăng độ dày */
+      background: linear-gradient(to right, 
+        rgba(255, 255, 255, 0), 
+        rgba(255, 255, 255, 0.8), 
+        rgba(100, 149, 237, 0.6), /* Thêm màu xanh lam */
+        rgba(255, 255, 255, 0));
+      filter: blur(8px); /* Tăng độ mờ */
+    }
+
+    .galaxy-ring:nth-child(1) {
+      transform: rotateX(70deg) rotateY(20deg); /* Thay đổi góc xoay */
+    }
+
+    .galaxy-ring:nth-child(2) {
+      transform: rotateX(20deg) rotateY(70deg); /* Thay đổi góc xoay */
+    }
+
+    .galaxy-ring:nth-child(3) { /* Thêm vòng tròn thứ ba */
+      transform: rotateX(45deg) rotateY(45deg);
+    }
+
+    @keyframes rotateGalaxy {
+      0% {
+        transform: rotateX(0deg) rotateY(0deg);
+      }
+      100% {
+        transform: rotateX(360deg) rotateY(360deg);
+      }
+    }
+
+    /* Thao tác với Dải Ngân Hà */
+    #galaxy:hover {
+      animation-play-state: paused; 
+    }
+
+    #galaxy:active {
+      cursor: grabbing; 
+    }
 
     .content {
       text-align: center;
       color: #fff;
       z-index: 1;
       font-family: 'Arial', sans-serif; 
-      /* Sử dụng font chữ đẹp hơn */
     }
 
     h1 {
       font-size: 3em;
-      text-shadow: 0 0 10px #fff; /* Thêm hiệu ứng text-shadow */
+      text-shadow: 0 0 10px #fff;
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <div class="shooting-star"></div> 
     <div class="star"></div>
     <div class="star"></div>
     <div class="star"></div>
@@ -136,11 +216,50 @@
 
     <div class="nebula"></div>
     <div class="nebula"></div>
+
+    <div id="galaxy">
+      <div class="galaxy-ring"></div>
+      <div class="galaxy-ring"></div>
+      <div class="galaxy-ring"></div> 
+    </div>
 
     <div class="content">
       <h1>Chào mừng đến với trang web huyền ảo!</h1>
       <p>Khám phá những điều kỳ diệu của vũ trụ.</p>
     </div>
   </div>
+
+  <script>
+    const galaxy = document.getElementById('galaxy');
+    let isDragging = false;
+    let previousX;
+    let previousY;
+
+    galaxy.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      previousX = e.clientX;
+      previousY = e.clientY;
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+
+      const deltaX = e.clientX - previousX;
+      const deltaY = e.clientY - previousY;
+
+      galaxy.style.transform = `rotateX(${galaxy.style.transform 
+        ? parseInt(galaxy.style.transform.split('rotateX(')[1]) + deltaY 
+        : deltaY}deg) rotateY(${galaxy.style.transform 
+        ? parseInt(galaxy.style.transform.split('rotateY(')[1]) + deltaX 
+        : deltaX}deg)`;
+
+      previousX = e.clientX;
+      previousY = e.clientY;
+    });
+  </script>
 </body>
 </html>
