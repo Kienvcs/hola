@@ -1,78 +1,165 @@
 <!DOCTYPE html>
-<html>
-<head>
-<title>Dải ngân hà</title>
-<style>
-body { margin: 0; overflow: hidden; }
-canvas { display: block; }
-</style>
-</head>
-<body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dải ngân hà phát sáng</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        background-color: black;
+      }
+      canvas {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="module">
+      import * as THREE from "https://cdn.skypack.dev/three@0.136.0";
+      import { OrbitControls } from "https://cdn.skypack.dev/three@0.136.0/examples/jsm/controls/OrbitControls.js";
 
-<script type="module">
-import * as THREE from 'https://cdn.skypack.dev/three@0.136.0';
-import { OrbitControls } from 'https://cdn.skypack.dev/three@0.136.0/examples/jsm/controls/OrbitControls.js';
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        10000
+      );
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+      const controls = new OrbitControls(camera, renderer.domElement);
+      camera.position.z = 5000;
 
-const controls = new OrbitControls(camera, renderer.domElement);
+      // Tạo các thiên hà
+      function createGalaxy(
+        n_stars,
+        core_radius,
+        galaxy_radius,
+        core_color,
+        star_color,
+        position,
+        rotation
+      ) {
+        const geometry = new THREE.BufferGeometry();
+        const vertices = [];
+        const colors = [];
 
-// Tạo các ngôi sao
-const geometry = new THREE.BufferGeometry();
-const vertices = [];
-const colors = [];
+        for (let i = 0; i < n_stars; i++) {
+          const x = (Math.random() - 0.5) * 2 * galaxy_radius;
+          const y = (Math.random() - 0.5) * 2 * galaxy_radius;
+          const z = (Math.random() - 0.5) * 2 * galaxy_radius;
+          vertices.push(x, y, z);
 
-for (let i = 0; i < 10000; i++) {
-  const x = (Math.random() - 0.5) * 2000;
-  const y = (Math.random() - 0.5) * 2000;
-  const z = (Math.random() - 0.5) * 2000;
-  vertices.push(x, y, z);
+          const color = new THREE.Color(star_color);
+          color.setHSL(Math.random(), 0.8, Math.random() * 0.2 + 0.4);
+          colors.push(color.r, color.g, color.b);
+        }
 
-  const color = new THREE.Color(0xffffff);
-  color.setHSL(Math.random(), 0.8, 0.5);
-  colors.push(color.r, color.g, color.b);
-}
+        geometry.setAttribute(
+          "position",
+          new THREE.Float32BufferAttribute(vertices, 3)
+        );
+        geometry.setAttribute(
+          "color",
+          new THREE.Float32BufferAttribute(colors, 3)
+        );
 
-geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+        const material = new THREE.PointsMaterial({
+          size: 2,
+          vertexColors: true,
+          sizeAttenuation: true,
+        });
 
-const material = new THREE.PointsMaterial({ size: 1, vertexColors: true });
+        const points = new THREE.Points(geometry, material);
+        points.position.set(position[0], position[1], position[2]);
+        points.rotation.set(rotation[0], rotation[1], rotation[2]);
+        scene.add(points);
 
-const points = new THREE.Points(geometry, material);
-scene.add(points);
+        const coreGeometry = new THREE.SphereGeometry(core_radius, 32, 32);
+        const coreMaterial = new THREE.MeshBasicMaterial({ color: core_color });
+        const core = new THREE.Mesh(coreGeometry, coreMaterial);
+        core.position.set(position[0], position[1], position[2]);
+        scene.add(core);
 
-// Tạo tâm dải ngân hà
-const coreGeometry = new THREE.SphereGeometry(100, 32, 32);
-const coreMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
-const core = new THREE.Mesh(coreGeometry, coreMaterial);
-scene.add(core);
+        // Thêm hiệu ứng glow cho ngôi sao
+        const sprite = new THREE.TextureLoader().load(
+          "https://i.imgur.com/lMVXAQm.png"
+        );
+        const pointMaterial = new THREE.PointsMaterial({
+          color: 0xffffff,
+          size: 60,
+          map: sprite,
+          blending: THREE.AdditiveBlending,
+          depthTest: false,
+          transparent: true,
+        });
 
-// Thêm ánh sáng
-const ambientLight = new THREE.AmbientLight(0x404040);
-scene.add(ambientLight);
+        const glowPoints = new THREE.Points(geometry, pointMaterial);
+        glowPoints.position.set(position[0], position[1], position[2]);
+        glowPoints.rotation.set(rotation[0], rotation[1], rotation[2]);
+        scene.add(glowPoints);
 
-const pointLight = new THREE.PointLight(0xffffff, 1, 1000);
-pointLight.position.set(0, 0, 0);
-scene.add(pointLight);
+        return { points, glowPoints };
+      }
 
-camera.position.z = 500;
+      const { points: galaxy1, glowPoints: glow1 } = createGalaxy(
+        5000,
+        100,
+        1000,
+        0xffffff,
+        0xffffff,
+        [-2000, 1000, 0],
+        [0, 0, 0]
+      );
+      const { points: galaxy2, glowPoints: glow2 } = createGalaxy(
+        8000,
+        150,
+        1500,
+        0xffe0bd,
+        0xffe0bd,
+        [2000, -1000, 0],
+        [0, Math.PI / 4, 0]
+      );
+      const { points: galaxy3, glowPoints: glow3 } = createGalaxy(
+        12000,
+        200,
+        3000,
+        0x00ffff,
+        0x00ffff,
+        [0, 0, -5000],
+        [Math.PI / 2, 0, 0]
+      );
 
-function animate() {
-  requestAnimationFrame(animate);
+      // Thêm ánh sáng
+      const ambientLight = new THREE.AmbientLight(0x404040);
+      scene.add(ambientLight);
 
-  // Xoay dải ngân hà
-  points.rotation.y += 0.001;
+      const pointLight = new THREE.PointLight(0xffffff, 1, 10000);
+      pointLight.position.set(0, 0, 0);
+      scene.add(pointLight);
 
-  controls.update();
-  renderer.render(scene, camera);
-}
+      function animate() {
+        requestAnimationFrame(animate);
 
-animate();
-</script>
+        // Xoay các thiên hà
+        galaxy1.rotation.y += 0.001;
+        glow1.rotation.y += 0.001;
 
-</body>
+        galaxy2.rotation.x += 0.001;
+        glow2.rotation.x += 0.001;
+
+        galaxy3.rotation.z += 0.001;
+        glow3.rotation.z += 0.001;
+
+        controls.update();
+        renderer.render(scene, camera);
+      }
+
+      animate();
+    </script>
+  </body>
 </html>
