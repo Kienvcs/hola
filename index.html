@@ -1,109 +1,57 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dải Ngân Hà 3D Có Thể Thao Tác</title>
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-      background-color: #000;
-    }
-
-    .container {
-      position: relative;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      perspective: 1000px;
-    }
-
-    #galaxy {
-      position: relative;
-      width: 400px;
-      height: 400px;
-      transform-style: preserve-3d;
-    }
-
-    .galaxy-ring {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      transform-style: preserve-3d;
-    }
-
-    .galaxy-ring:before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotateX(90deg);
-      width: 100%;
-      height: 10px;
-      background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.8), rgba(255,255,255,0));
-      filter: blur(5px);
-    }
-
-    .galaxy-ring:nth-child(1) {
-      transform: rotateX(60deg) rotateY(30deg);
-    }
-
-    .galaxy-ring:nth-child(2) {
-      transform: rotateX(30deg) rotateY(60deg);
-    }
-
-    /* Thao tác với Dải Ngân Hà */
-    #galaxy {
-      cursor: grab;
-    }
-
-    #galaxy:active {
-      cursor: grabbing;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang web tuyệt đẹp</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <div id="galaxy">
-      <div class="galaxy-ring"></div>
-      <div class="galaxy-ring"></div>
-    </div>
-  </div>
+    <header>
+        <div class="container">
+            <h1>Tiêu đề trang web</h1>
+            <nav>
+                <ul>
+                    <li><a href="#">Trang chủ</a></li>
+                    <li><a href="#">Giới thiệu</a></li>
+                    <li><a href="#">Dịch vụ</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-  <script>
-    const galaxy = document.getElementById('galaxy');
-    let isDragging = false;
-    let previousX;
-    let previousY;
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h2>Tiêu đề nổi bật</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
+                <button>Tìm hiểu thêm</button>
+            </div>
+        </section>
 
-    galaxy.addEventListener('mousedown', (e) => {
-      isDragging = true;
-      previousX = e.clientX;
-      previousY = e.clientY;
-    });
+        <section class="features">
+            <div class="container">
+                <div class="feature">
+                    <h3>Tính năng 1</h3>
+                    <p>Nulla vitae elit libero, a pharetra augue. Donec sed odio dui.</p>
+                </div>
+                <div class="feature">
+                    <h3>Tính năng 2</h3>
+                    <p>Nulla vitae elit libero, a pharetra augue. Donec sed odio dui.</p>
+                </div>
+                <div class="feature">
+                    <h3>Tính năng 3</h3>
+                    <p>Nulla vitae elit libero, a pharetra augue. Donec sed odio dui.</p>
+                </div>
+            </div>
+        </section>
+    </main>
 
-    window.addEventListener('mouseup', () => {
-      isDragging = false;
-    });
-
-    window.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-
-      const deltaX = e.clientX - previousX;
-      const deltaY = e.clientY - previousY;
-
-      galaxy.style.transform = `rotateX(${galaxy.style.transform 
-        ? parseInt(galaxy.style.transform.split('rotateX(')[1]) + deltaY 
-        : deltaY}deg) rotateY(${galaxy.style.transform 
-        ? parseInt(galaxy.style.transform.split('rotateY(')[1]) + deltaX 
-        : deltaX}deg)`;
-
-      previousX = e.clientX;
-      previousY = e.clientY;
-    });
-  </script>
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Trang web tuyệt đẹp</p>
+        </div>
+    </footer>
 </body>
 </html>
