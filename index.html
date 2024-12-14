@@ -1,57 +1,78 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang web tuyệt đẹp</title>
-    <link rel="stylesheet" href="style.css">
+<title>Dải ngân hà</title>
+<style>
+body { margin: 0; overflow: hidden; }
+canvas { display: block; }
+</style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>Tiêu đề trang web</h1>
-            <nav>
-                <ul>
-                    <li><a href="#">Trang chủ</a></li>
-                    <li><a href="#">Giới thiệu</a></li>
-                    <li><a href="#">Dịch vụ</a></li>
-                    <li><a href="#">Liên hệ</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
 
-    <main>
-        <section class="hero">
-            <div class="container">
-                <h2>Tiêu đề nổi bật</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-                <button>Tìm hiểu thêm</button>
-            </div>
-        </section>
+<script type="module">
+import * as THREE from 'https://cdn.skypack.dev/three@0.136.0';
+import { OrbitControls } from 'https://cdn.skypack.dev/three@0.136.0/examples/jsm/controls/OrbitControls.js';
 
-        <section class="features">
-            <div class="container">
-                <div class="feature">
-                    <h3>Tính năng 1</h3>
-                    <p>Nulla vitae elit libero, a pharetra augue. Donec sed odio dui.</p>
-                </div>
-                <div class="feature">
-                    <h3>Tính năng 2</h3>
-                    <p>Nulla vitae elit libero, a pharetra augue. Donec sed odio dui.</p>
-                </div>
-                <div class="feature">
-                    <h3>Tính năng 3</h3>
-                    <p>Nulla vitae elit libero, a pharetra augue. Donec sed odio dui.</p>
-                </div>
-            </div>
-        </section>
-    </main>
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2023 Trang web tuyệt đẹp</p>
-        </div>
-    </footer>
+const controls = new OrbitControls(camera, renderer.domElement);
+
+// Tạo các ngôi sao
+const geometry = new THREE.BufferGeometry();
+const vertices = [];
+const colors = [];
+
+for (let i = 0; i < 10000; i++) {
+  const x = (Math.random() - 0.5) * 2000;
+  const y = (Math.random() - 0.5) * 2000;
+  const z = (Math.random() - 0.5) * 2000;
+  vertices.push(x, y, z);
+
+  const color = new THREE.Color(0xffffff);
+  color.setHSL(Math.random(), 0.8, 0.5);
+  colors.push(color.r, color.g, color.b);
+}
+
+geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+const material = new THREE.PointsMaterial({ size: 1, vertexColors: true });
+
+const points = new THREE.Points(geometry, material);
+scene.add(points);
+
+// Tạo tâm dải ngân hà
+const coreGeometry = new THREE.SphereGeometry(100, 32, 32);
+const coreMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+const core = new THREE.Mesh(coreGeometry, coreMaterial);
+scene.add(core);
+
+// Thêm ánh sáng
+const ambientLight = new THREE.AmbientLight(0x404040);
+scene.add(ambientLight);
+
+const pointLight = new THREE.PointLight(0xffffff, 1, 1000);
+pointLight.position.set(0, 0, 0);
+scene.add(pointLight);
+
+camera.position.z = 500;
+
+function animate() {
+  requestAnimationFrame(animate);
+
+  // Xoay dải ngân hà
+  points.rotation.y += 0.001;
+
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+animate();
+</script>
+
 </body>
 </html>
