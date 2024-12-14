@@ -1,92 +1,146 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hồ Sơ Cá Nhân</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nền Trang Huyền Ảo</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: radial-gradient(ellipse at bottom, #000428, #004e92); 
+      /* Sử dụng radial-gradient để tạo hiệu ứng lan tỏa từ dưới lên */
+    }
 
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+    .container {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      perspective: 1000px; /* Tạo hiệu ứng 3D cho các ngôi sao */
+    }
 
-        h1 {
-            text-align: center;
-            color: #333;
-        }
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background-color: #fff;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #fff;
+      animation: twinkle 2s linear infinite, move 10s linear infinite; 
+      /* Thêm animation di chuyển cho ngôi sao */
+    }
 
-        .profile-pic {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+    @keyframes twinkle {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.2;
+      }
+    }
 
-        .profile-pic img {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
+    /* Animation di chuyển với hiệu ứng 3D */
+    @keyframes move {
+      0% {
+        transform: translateZ(0px);
+      }
+      50% {
+        transform: translateZ(200px); /* Di chuyển ngôi sao ra xa */
+      }
+      100% {
+        transform: translateZ(0px);
+      }
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+    .star:nth-child(n) {
+      top: random(0%, 100%);
+      left: random(0%, 100%);
+      animation-delay: random(0s, 2s);
+    }
 
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+    /* Tinh vân với nhiều màu sắc hơn */
+    .nebula {
+      position: absolute;
+      width: 300px;
+      height: 200px;
+      background: radial-gradient(ellipse at center, 
+        rgba(100, 149, 237, 0.6), /* Màu xanh lam */
+        rgba(255, 165, 0, 0.4),  /* Màu cam */
+        rgba(255, 255, 255, 0) 70%);
+      filter: blur(50px);
+      animation: drift 15s linear infinite, rotate 20s linear infinite; 
+      /* Thêm animation xoay cho tinh vân */
+    }
 
-        th {
-            background-color: #f0f0f0;
-        }
-    </style>
+    @keyframes drift {
+      0% {
+        transform: translate(0, 0);
+      }
+      100% {
+        transform: translate(100px, -50px);
+      }
+    }
+
+    /* Animation xoay */
+    @keyframes rotate {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .nebula:nth-child(1) {
+      top: 30%;
+      left: 20%;
+      animation-delay: 3s;
+    }
+
+    .nebula:nth-child(2) {
+      top: 60%;
+      left: 80%;
+      animation-delay: 7s;
+    }
+
+    /* Thêm nhiều nebula hơn nếu cần */
+
+    .content {
+      text-align: center;
+      color: #fff;
+      z-index: 1;
+      font-family: 'Arial', sans-serif; 
+      /* Sử dụng font chữ đẹp hơn */
+    }
+
+    h1 {
+      font-size: 3em;
+      text-shadow: 0 0 10px #fff; /* Thêm hiệu ứng text-shadow */
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Hồ Sơ Cá Nhân</h1>
+  <div class="container">
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
+    <div class="star"></div>
 
-        <div class="profile-pic">
-            <img src="hinh-anh-dai-dien.jpg" alt="Ảnh đại diện"> 
-            </div>
+    <div class="nebula"></div>
+    <div class="nebula"></div>
 
-        <table>
-            <tr>
-                <th>Họ và tên:</th>
-                <td>Nguyễn Văn A</td> 
-                </tr>
-            <tr>
-                <th>Ngày sinh:</th>
-                <td>01/01/1990</td> 
-                </tr>
-            <tr>
-                <th>Giới tính:</th>
-                <td>Nam</td> 
-                </tr>
-            <tr>
-                <th>Địa chỉ:</th>
-                <td>Hà Nội</td> 
-                </tr>
-            <tr>
-                <th>Email:</th>
-                <td>nguyenvana@email.com</td> 
-                </tr>
-            <tr>
-                <th>Số điện thoại:</th>
-                <td>0123456789</td> 
-                </tr>
-        </table>
+    <div class="content">
+      <h1>Chào mừng đến với trang web huyền ảo!</h1>
+      <p>Khám phá những điều kỳ diệu của vũ trụ.</p>
     </div>
+  </div>
 </body>
 </html>
